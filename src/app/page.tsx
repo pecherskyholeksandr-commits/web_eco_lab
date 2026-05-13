@@ -1,6 +1,12 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { stations, measurements } from "../lib/data";
-import { AirQuality } from "../types/environment";
+import { stations, measurements } from "@/lib/data";
+import { AirQuality } from "@/types/environment";
+import Map from "@/components/map/Map";
+import Charts from "@/components/charts/Charts";
+
 
 function calculateStats() {
     const totals: AirQuality = {
@@ -36,13 +42,36 @@ function calculateStats() {
 export default function Home() {
     const stats = calculateStats();
 
+    const [selectedStationId, setSelectedStationId] = useState<string | null>(null);
+
     return (
-        <div>
-            <h2 className="text-2xl font-bold mb-4">
-                Monitoring Stations
+        <div className="space-y-10">
+
+            <h1 className="text-3xl font-bold">
+                Eco Monitoring System Dashboard
+            </h1>
+
+            <div className="border rounded-2xl shadow-md overflow-hidden">
+                <Map
+                    selectedId={selectedStationId}
+                    onSelect={setSelectedStationId}
+                />
+            </div>
+
+            <button
+                onClick={() => setSelectedStationId(null)}
+                className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+            >
+                Reset selection
+            </button>
+
+            <Charts selectedStationId={selectedStationId} />
+
+            <h2 className="text-2xl font-bold">
+                Monitoring Stations (SSR)
             </h2>
 
-            <ul className="mb-8">
+            <ul className="space-y-1">
                 {stations.map((station) => (
                     <li key={station.id}>
                         <Link
@@ -55,7 +84,7 @@ export default function Home() {
                 ))}
             </ul>
 
-            <h2 className="text-2xl font-bold mb-4">
+            <h2 className="text-2xl font-bold mt-6">
                 Air Quality Statistics (SSR calculated)
             </h2>
 
@@ -67,6 +96,7 @@ export default function Home() {
                 <li>O3: {stats.o3}</li>
                 <li>SO2: {stats.so2}</li>
             </ul>
+
         </div>
     );
 }

@@ -20,9 +20,7 @@ for (let s = 1; s <= stationsCount; s++) {
         measurements.push({
             stationId: String(s),
 
-            timestamp: new Date(
-                Date.now() - h * 3600000
-            ).toISOString(),
+            timestamp: `2026-01-01T${h}:00:00Z`,
 
             airQuality: {
                 pm25: Number((12 + Math.sin(h / 4) * 6 + Math.random()).toFixed(2)),
