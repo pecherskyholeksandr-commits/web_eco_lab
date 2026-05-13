@@ -1,12 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+
 import { stations, measurements } from "@/lib/data";
 import { AirQuality } from "@/types/environment";
+
 import Map from "@/components/map/Map";
 import Charts from "@/components/charts/Charts";
 
+import { trackEvent } from "@/lib/analytics";
 
 function calculateStats() {
     const totals: AirQuality = {
@@ -42,11 +45,31 @@ function calculateStats() {
 export default function Home() {
     const stats = calculateStats();
 
-    const [selectedStationId, setSelectedStationId] = useState<string | null>(null);
+    const [selectedStationId, setSelectedStationId] =
+        useState<string | null>(null);
+
+    useEffect(() => {
+        trackEvent("page_view", {
+            page: "home",
+        });
+    }, []);
+
+    const handleSelectStation = (id: string) => {
+        setSelectedStationId(id);
+
+        trackEvent("station_select", {
+            stationId: id,
+        });
+    };
+
+    const handleReset = () => {
+        setSelectedStationId(null);
+
+        trackEvent("station_reset");
+    };
 
     return (
         <div className="space-y-10">
-
             <h1 className="text-3xl font-bold">
                 Eco Monitoring System Dashboard
             </h1>
@@ -54,12 +77,12 @@ export default function Home() {
             <div className="border rounded-2xl shadow-md overflow-hidden">
                 <Map
                     selectedId={selectedStationId}
-                    onSelect={setSelectedStationId}
+                    onSelect={handleSelectStation}
                 />
             </div>
 
             <button
-                onClick={() => setSelectedStationId(null)}
+                onClick={handleReset}
                 className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
             >
                 Reset selection
@@ -96,7 +119,6 @@ export default function Home() {
                 <li>O3: {stats.o3}</li>
                 <li>SO2: {stats.so2}</li>
             </ul>
-
         </div>
     );
 }

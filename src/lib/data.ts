@@ -20,15 +20,15 @@ for (let s = 1; s <= stationsCount; s++) {
         measurements.push({
             stationId: String(s),
 
-            timestamp: `2026-01-01T${h}:00:00Z`,
+            timestamp: `2026-01-01T${String(h).padStart(2, "0")}:00:00Z`,
 
             airQuality: {
-                pm25: Number((12 + Math.sin(h / 4) * 6 + Math.random()).toFixed(2)),
-                pm10: Number((20 + Math.sin(h / 5) * 8 + Math.random()).toFixed(2)),
-                co: Number((0.3 + Math.random() * 0.5).toFixed(2)),
+                pm25: Number((12 + Math.sin(h / 4) * 6).toFixed(2)),
+                pm10: Number((20 + Math.sin(h / 5) * 8).toFixed(2)),
+                co: Number((0.3 + Math.sin(h) * 0.1).toFixed(2)),
                 no2: Number((18 + Math.sin(h / 6) * 7).toFixed(2)),
                 o3: Number((25 + Math.cos(h / 5) * 10).toFixed(2)),
-                so2: Number((2 + Math.random() * 3).toFixed(2)),
+                so2: Number((2 + Math.sin(h / 3)).toFixed(2)),
             },
         });
     }

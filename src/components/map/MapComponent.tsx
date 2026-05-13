@@ -42,7 +42,6 @@ function MapCenter({
             });
         }
     }, [lat, lng, map]);
-
     return null;
 }
 
