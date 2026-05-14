@@ -1,21 +1,24 @@
 import { NextResponse } from "next/server";
 import { stations } from "@/lib/data";
 
+type Params = {
+    id: string;
+};
+
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+    context: { params: Params }
 ) {
-    const station = stations.find((s) => s.id === params.id);
+    const { id } = context.params;
+
+    const station = stations.find((s) => s.id === id);
 
     if (!station) {
         return NextResponse.json(
-            { success: false, message: "Station not found" },
+            { error: "Station not found" },
             { status: 404 }
         );
     }
 
-    return NextResponse.json({
-        success: true,
-        data: station,
-    });
+    return NextResponse.json(station);
 }
