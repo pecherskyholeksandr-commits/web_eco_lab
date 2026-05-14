@@ -2,12 +2,15 @@
 
 import dynamic from "next/dynamic";
 
-const DynamicMap = dynamic(
-    () => import("./MapComponent"),
-    {
-        ssr: false,
-    }
-);
+// lazy loading карти
+const DynamicMap = dynamic(() => import("./MapComponent"), {
+    ssr: false,
+    loading: () => (
+        <div className="p-4 text-center text-gray-500">
+            Loading map...
+        </div>
+    ),
+});
 
 export default function Map({
     selectedId,
