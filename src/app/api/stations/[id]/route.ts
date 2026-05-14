@@ -1,17 +1,11 @@
 import { NextResponse } from "next/server";
 import { stations } from "@/lib/data";
 
-type Params = {
-    id: string;
-};
-
 export async function GET(
     request: Request,
-    context: { params: Params }
+    { params }: { params: { id: string } }
 ) {
-    const { id } = context.params;
-
-    const station = stations.find((s) => s.id === id);
+    const station = stations.find((s) => s.id === params.id);
 
     if (!station) {
         return NextResponse.json(
